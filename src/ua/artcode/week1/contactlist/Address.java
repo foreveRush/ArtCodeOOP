@@ -29,5 +29,21 @@ public class Address {
         return String.format("\"address\" : { \"city\" : \"%s\", \"street\" : \"%s\", \"number\" : \"%d\" }", city, street, number);
     }
 
+    public static Address createAddressFromJson(String json) {
+
+        String[] temp = json.split(",");
+
+        String[] temp2 = temp[0].split("\"");
+        String city = temp2[3];
+
+        temp2 = temp[1].split("\"");
+        String street = temp2[3];
+
+        temp2 = temp[2].split("\"");
+        int number = Integer.parseInt(temp2[3]);
+
+        return new Address(city, street, number);
+    }
+
 
 }
