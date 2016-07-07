@@ -23,6 +23,11 @@ public class ContactList {
         list.remove(contact);
     }
 
+    public void removeLastContact() {
+
+        list.remove(list.size()-1);
+    }
+
     public void print() {
 
         int i = 1;
