@@ -37,15 +37,25 @@ public class Parking {
     }
 
     public void addMotoOnLastFreePlace(Moto moto){
+        if(!isOpen) {
+            System.out.println("Garage is closed!");
+            return;
+        }
         for(int i=garage.length-1; i>=0; i--){
             if(garage[i]==null) {
                 garage[i] = moto;
+                System.out.println("Done! Motorcycle added");
+                return;
             }
         }
-        System.out.println("Done!");
+
     }
 
     public Moto takeLastMoto() {
+        if(!isOpen) {
+            System.out.println("Garage is closed!");
+            return null;
+        }
         for(int i=garage.length-1; i>=0; i--){
             if(garage[i]==null) {
                 return garage[i];
@@ -55,15 +65,23 @@ public class Parking {
     }
 
     public void addMotoByPlaceNumber(Moto moto, int placeNumber) {
+        if(!isOpen) {
+            System.out.println("Garage is closed!");
+            return;
+        }
         if(garage[placeNumber]!=null) {
             System.out.println("This place is busy");
         } else {
             garage[placeNumber] = moto;
-            System.out.println("Done!");
+            System.out.println("Done! Motorcycle added");
         }
     }
 
     public Moto takeMotoByPlaceNumber(int placeNumber) {
+        if(!isOpen) {
+            System.out.println("Garage is closed!");
+            return null;
+        }
         if(garage[placeNumber]==null) {
             System.out.println("Place is empty");
             return null;
@@ -73,6 +91,10 @@ public class Parking {
     }
 
     public void clearGaragePlaces() {
+        if(!isOpen) {
+            System.out.println("Garage is closed!");
+            return;
+        }
         for(Moto moto : garage) {
             moto = null;
         }
@@ -84,8 +106,10 @@ public class Parking {
             System.out.print(i+". ");
             if(moto==null) {
                 System.out.println("free");
+                i++;
             } else {
                 System.out.println(String.format("Brand: %s, number: %s", moto.brand, moto.number));
+                i++;
             }
         }
     }

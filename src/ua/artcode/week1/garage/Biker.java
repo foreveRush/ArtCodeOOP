@@ -5,6 +5,19 @@ package ua.artcode.week1.garage;
  */
 public class Biker {
 
-    boolean isOpen;
+    Moto moto;
 
+    public void buyMotorcycle(Moto moto) {
+
+        this.moto = moto;
+    }
+
+    public void sellMotorcycle() {
+        moto = null;
+        System.out.println("Motorcycle saled");
+    }
+
+    public void fixMotorcycle() {
+        System.out.println("Motorcycle fixed");
+    }
 }
