@@ -6,4 +6,9 @@ package ua.artcode.week1.garage;
 public class Moto {
     String brand;
     String number;
+
+    public Moto(String brand, String number) {
+        this.brand = brand;
+        this.number = number;
+    }
 }
