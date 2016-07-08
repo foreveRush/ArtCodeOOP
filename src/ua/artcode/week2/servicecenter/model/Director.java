@@ -2,8 +2,6 @@ package ua.artcode.week2.servicecenter.model;
 
 import ua.artcode.week1.contactlist.Address;
 
-import java.util.ArrayList;
-
 /**
  * Created by Serhii Fursenko on 09.07.2016.
  * fyrsenko@gmail.com
@@ -49,7 +47,7 @@ public class Director {
     public void increaseSalary() {
         serviceCenter.getAdministrator().setSalary((int)(serviceCenter.getAdministrator().getSalary()*1.1));
         for(Worker worker : serviceCenter.getRepairWorkers()) {
-            worker.setSalary((int)(worker.getSalary()*1.1);
+            worker.setSalary((int)(worker.getSalary()*1.1));
         }
     }
 
