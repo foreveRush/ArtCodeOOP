@@ -9,7 +9,7 @@ public class Client {
     private String phone;
     private Passport passport;
 
-    public Client(String fullname, String phone, Passport passport) {
+    public Client(String phone, Passport passport) {
         this.phone = phone;
         this.passport = passport;
     }
@@ -28,5 +28,13 @@ public class Client {
 
     public void setPassport(Passport passport) {
         this.passport = passport;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "phone='" + phone + '\'' +
+                ", passport=" + passport +
+                '}';
     }
 }
