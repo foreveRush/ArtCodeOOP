@@ -1,4 +1,4 @@
-package ua.artcode.week2.newpost;
+package ua.artcode.week2.newpost.model;
 
 /**
  * Created by home on 08.07.2016.
