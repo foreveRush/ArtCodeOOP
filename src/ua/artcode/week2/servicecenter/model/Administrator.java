@@ -29,26 +29,33 @@ public class Administrator extends Worker {
     }
 
     public void showAllClients() {
+        System.out.println("\nClients:");
         int i = 1;
         for (Client client : workPlace.getClients()) {
-            System.out.println(i++ + ". " + client);
+            System.out.println(i++ + ". " + client.getName());
         }
+        System.out.println();
     }
 
     public void getTechForRepair(Client client, Tech [] tech){
-        for(Client clientIterator : workPlace.getClients()) {
-            if(clientIterator == client) {
-                break;
-            }
-            workPlace.getClients().add(client);
-        }
+        workPlace.getClients().add(client);
+
         Ticket newOrder = new Ticket(client, new ArrayList<Tech>(Arrays.asList(tech)));
         System.out.printf("Generate new order #%s\n", newOrder.getId());
         workPlace.getActualOrders().add(newOrder);
         System.out.printf("Price for order is %d\n",newOrder.getOrderPrice() );
         cash+=newOrder.getOrderPrice();
-        System.out.printf("Sending order to repairer...\n");
-        this.giveOrderToRepairer(newOrder);
+
+
+    }
+
+
+
+    public void changeStatusToDone(Ticket order) {
+        System.out.println("Change status of order to DONE");
+        workPlace.getDoneOrders().add(order);
+        workPlace.getActualOrders().remove(order);
+
     }
 
     public void returnTech(Ticket ticket) {
@@ -59,9 +66,7 @@ public class Administrator extends Worker {
                 return;
             }
         }
-        System.out.println("Change status of order to DONE");
-        workPlace.getDoneOrders().add(ticket);
-        workPlace.getActualOrders().remove(ticket);
+
         System.out.println("Client took back his tech");
         this.reportList.add(ticket.toString());
     }
@@ -71,11 +76,22 @@ public class Administrator extends Worker {
     }
 
     public void giveOrderToRepairer(Ticket ticket) {
+        System.out.printf("Sending order to repairer...\n");
         for(Repairer repairer : workPlace.getWorkers()) {
             if(repairer.getOrder()==null) {
                 repairer.setOrder(ticket);
                 return;
             }
         }
+    }
+
+    public Ticket findTicketById(int id) {
+        for(Ticket ticket : workPlace.getActualOrders()) {
+            if(id==ticket.getId()) {
+                return ticket;
+            }
+        }
+        System.out.println("Ticket not found");
+        return null;
     }
 }
