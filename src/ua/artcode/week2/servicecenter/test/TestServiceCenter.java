@@ -14,8 +14,7 @@ public class TestServiceCenter {
     public static void main(String[] args) {
 
         Director director = new Director();
-        ServiceCenter serviceCenter = new ServiceCenter();
-        director.setWorkPlace(serviceCenter);
+        ServiceCenter serviceCenter = new ServiceCenter(director);
 
         serviceCenter.setAddress(new Address("Kiyv", "Lesi", 22));
 

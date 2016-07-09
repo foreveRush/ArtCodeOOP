@@ -6,7 +6,7 @@ import ua.artcode.week1.contactlist.Address;
  * Created by Serhii Fursenko on 09.07.2016.
  * fyrsenko@gmail.com
  */
-public class Director {
+public class Director extends Worker{
 
     private ServiceCenter workPlace;
 
@@ -46,7 +46,7 @@ public class Director {
     }
 
     public void payTax() {
-
+        System.out.println("Tax paided");
     }
 
     public ServiceCenter getWorkPlace() {

@@ -10,12 +10,26 @@ import java.util.ArrayList;
  */
 public class ServiceCenter {
 
+    private Director director;
     private Address address;
     private Administrator administrator;
     private ArrayList<Repairer> workers = new ArrayList<>();
     private ArrayList<Client> clients = new ArrayList<>();
     private ArrayList<Ticket> actualOrders = new ArrayList<>();
     private ArrayList<Ticket> doneOrders = new ArrayList<>();
+
+    public ServiceCenter(Director director) {
+        this.director = director;
+        director.setWorkPlace(this);
+    }
+
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
 
     public Address getAddress() {
         return address;
