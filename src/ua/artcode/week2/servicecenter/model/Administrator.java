@@ -13,6 +13,12 @@ public class Administrator extends Worker {
     private int cash;
     private ArrayList<String> reportList = new ArrayList<>();
 
+    public Administrator(String name, String bankAcc, int salary) {
+
+        this.setName(name);
+        this.setBankAcc(bankAcc);
+        this.setSalary(salary);
+    }
 
     public ServiceCenter getWorkPlace() {
         return workPlace;

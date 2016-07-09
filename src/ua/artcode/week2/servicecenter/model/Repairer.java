@@ -9,6 +9,13 @@ public class Repairer extends Worker {
     private Ticket order;
     private ServiceCenter workPlace;
 
+    public Repairer(String name, String bankAcc, int salary) {
+
+        this.setName(name);
+        this.setBankAcc(bankAcc);
+        this.setSalary(salary);
+    }
+
     public Ticket getOrder() {
         return order;
     }
