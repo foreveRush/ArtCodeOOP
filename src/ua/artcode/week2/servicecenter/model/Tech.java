@@ -1,4 +1,4 @@
-package ua.artcode.week2.servicecenter;
+package ua.artcode.week2.servicecenter.model;
 import ua.artcode.week2.newpost.model.MyDate;
 
 /**

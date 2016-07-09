@@ -1,4 +1,4 @@
-package ua.artcode.week2.servicecenter;
+package ua.artcode.week2.servicecenter.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ public class Administrator extends Worker {
     private ServiceCenter workPlace;
     private int cash;
     private ArrayList<String> reportList = new ArrayList<>();
-    private int indexOfRepairers;
+
 
     public ServiceCenter getWorkPlace() {
         return workPlace;
@@ -37,18 +37,23 @@ public class Administrator extends Worker {
             workPlace.getClients().add(client);
         }
         Ticket newOrder = new Ticket(client, new ArrayList<Tech>(Arrays.asList(tech)));
+        System.out.printf("Generate new order #%s\n", newOrder.getId());
         workPlace.getActualOrders().add(newOrder);
+        System.out.printf("Price for order is %d\n",newOrder.getOrderPrice() );
         cash+=newOrder.getOrderPrice();
+        System.out.printf("Sending order to repairer...\n");
         this.giveOrderToRepairer(newOrder);
     }
 
     public void returnTech(Ticket ticket) {
+        System.out.println("Administrator chacking order...");
         for(Tech tech : ticket.getTechList()) {
             if(tech.getCondition()==Condition.BAD) {
                 System.out.println("Order in work yet...");
                 return;
             }
         }
+        System.out.println("Change status of order to DONE");
         workPlace.getDoneOrders().add(ticket);
         workPlace.getActualOrders().remove(ticket);
         System.out.println("Client took back his tech");

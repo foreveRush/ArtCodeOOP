@@ -1,4 +1,4 @@
-package ua.artcode.week2.servicecenter;
+package ua.artcode.week2.servicecenter.model;
 
 import ua.artcode.week1.contactlist.Address;
 
@@ -17,8 +17,10 @@ public class Director {
     public void addWorker(Worker worker){
         if(worker instanceof Administrator) {
             workPlace.setAdministrator((Administrator)worker);
+            workPlace.getAdministrator().setWorkPlace(this.workPlace);
         } else {
             workPlace.getWorkers().add((Repairer) worker);
+            ((Repairer) worker).setWorkPlace(this.workPlace);
         }
     }
 
@@ -45,5 +47,13 @@ public class Director {
 
     public void payTax() {
 
+    }
+
+    public ServiceCenter getWorkPlace() {
+        return workPlace;
+    }
+
+    public void setWorkPlace(ServiceCenter workPlace) {
+        this.workPlace = workPlace;
     }
 }

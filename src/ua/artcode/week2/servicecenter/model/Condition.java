@@ -1,4 +1,4 @@
-package ua.artcode.week2.servicecenter;
+package ua.artcode.week2.servicecenter.model;
 
 /**
  * Created by Serhii Fursenko on 09.07.2016.
