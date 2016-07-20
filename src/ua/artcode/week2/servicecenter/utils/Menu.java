@@ -27,8 +27,8 @@ public class Menu {
             System.out.println("Login as:");
             System.out.println("1. Director");
             System.out.println("2. Administrator");
-            System.out.println("3. Client");
-            System.out.println("4. Repairer");
+            System.out.println("3. Repairer");
+            System.out.println("4. Client");
             System.out.println("0. Exit");
 
             int choise = scanner.nextInt();
@@ -44,10 +44,10 @@ public class Menu {
                     runAdministratorMenu();
                     break;
                 case 3:
-                    runClientMenu();
+                    runRepairerMenu();
                     break;
                 case 4:
-                    runRepairerMenu();
+                    runClientMenu();
                     break;
             }
         }
@@ -81,7 +81,7 @@ public class Menu {
                     System.out.println("Number:");
                     int number = scanner.nextInt();
                     scanner.nextLine();
-                    serviceCenter.getDirector().changeAddressOfWorkPlace(new Address(city,street,number));
+                    serviceCenter.getDirector().changeAddressOfWorkPlace(new Address(city, street, number));
                     System.out.println("Address changed");
                     break;
                 case 2:
@@ -103,7 +103,7 @@ public class Menu {
                             System.out.println("Input salary");
                             int salary = scanner.nextInt();
                             scanner.nextLine();
-                            serviceCenter.getDirector().addWorker(new Administrator(name, bankAcc,salary));
+                            serviceCenter.getDirector().addWorker(new Administrator(name, bankAcc, salary));
                             break;
                         case 2:
                             System.out.println("Input name");
@@ -113,7 +113,7 @@ public class Menu {
                             System.out.println("Input salary");
                             int salary1 = scanner.nextInt();
                             scanner.nextLine();
-                            serviceCenter.getDirector().addWorker(new Repairer(name1, bankAcc1,salary1));
+                            serviceCenter.getDirector().addWorker(new Repairer(name1, bankAcc1, salary1));
                             break;
                     }
 
@@ -154,7 +154,7 @@ public class Menu {
                 System.out.println("Administrator removed");
                 break;
             default:
-                serviceCenter.getWorkers().remove(index-3);
+                serviceCenter.getWorkers().remove(index - 3);
                 System.out.println("Worker removed");
                 break;
         }
@@ -164,7 +164,7 @@ public class Menu {
         System.out.printf("1. Director - %s\n", serviceCenter.getDirector().getName());
         System.out.printf("2. Administrator - %s\n", serviceCenter.getAdministrator().getName());
         int i = 3;
-        for(Repairer repairer : serviceCenter.getWorkers()) {
+        for (Repairer repairer : serviceCenter.getWorkers()) {
             System.out.printf("%d. Worker - %s\n", i++, repairer.getName());
         }
     }
@@ -233,6 +233,18 @@ public class Menu {
                     int ticket = scanner.nextInt();
                     scanner.nextLine();
                     /////////////////////////////////////////////////////////
+                    Ticket order = serviceCenter.getAdministrator().findTicketById(ticket);
+                    serviceCenter.getAdministrator().returnTech(order);
+                    break;
+                case 5:
+                    System.out.println("Please choose the ticket to send");
+                    int index = 1;
+                    for (Ticket ticket1 : serviceCenter.getActualOrders()) {
+                        System.out.printf("%d. Order #%d from %s\n", index++, ticket1.getId(), ticket1.getClient().getName());
+                    }
+                    int choiseTicket = scanner.nextInt();
+                    scanner.nextLine();
+                    serviceCenter.getAdministrator().giveOrderToRepairer(serviceCenter.getActualOrders().get(choiseTicket - 1));
                     break;
 
             }
@@ -240,9 +252,54 @@ public class Menu {
         }
     }
 
-    private void runClientMenu() {
+    private void runRepairerMenu() {
+
+        System.out.printf("\nLogin as:\n");
+        int iteraor = 1;
+        for(Repairer repairer : serviceCenter.getWorkers()) {
+            System.out.printf("%d. %s\n", iteraor++, repairer.getName());
+        }
+        int index = scanner.nextInt();
+        scanner.nextLine();
+
+        Repairer repairer = serviceCenter.getWorkers().get(index-1);
+        System.out.println("1. Show actual tasks");
+        System.out.println("2. Return done order");
+        System.out.println("0. Log out");
+
+        index = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (index) {
+            case 0:
+                return;
+            case 1:
+                iteraor = 0;
+                System.out.printf("Order #%d:", repairer.getOrder().getId());
+                for(Tech tech : repairer.getOrder().getTechList()) {
+                    System.out.printf("%d. %s serial = %s , status = %s",
+                            iteraor++, tech.getTitle(), tech.getSerialNumber(), tech.getCondition());
+                }
+                System.out.println("0. Go back");
+                index = scanner.nextInt();
+                scanner.nextLine();
+
+                if(repairer.getOrder().getTechList().get(index-1).getCondition()==Condition.BAD) {
+                    repairer.repair(repairer.getOrder().getTechList().get(index-1));
+                }
+                break;
+            case 2:
+                for(Tech tech : repairer.getOrder().getTechList()) {
+                    if(tech.getCondition()!=Condition.OK) {
+                        System.out.println("Order not done yet");
+                        break;
+                    }
+                }
+                serviceCenter.getAdministrator().changeStatusToDone(repairer.getOrder());
+        }
+
     }
 
-    private void runRepairerMenu() {
+    private void runClientMenu() {
     }
 }

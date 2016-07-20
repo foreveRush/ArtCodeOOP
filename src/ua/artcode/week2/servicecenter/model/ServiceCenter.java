@@ -3,6 +3,7 @@ package ua.artcode.week2.servicecenter.model;
 import ua.artcode.week1.contactlist.Address;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by Serhii Fursenko on 09.07.2016.
@@ -14,7 +15,7 @@ public class ServiceCenter {
     private Address address;
     private Administrator administrator;
     private ArrayList<Repairer> workers = new ArrayList<>();
-    private ArrayList<Client> clients = new ArrayList<>();
+    private HashSet<Client> clients = new HashSet<>();
     private ArrayList<Ticket> actualOrders = new ArrayList<>();
     private ArrayList<Ticket> doneOrders = new ArrayList<>();
 
@@ -55,11 +56,11 @@ public class ServiceCenter {
         this.address = address;
     }
 
-    public ArrayList<Client> getClients() {
+    public HashSet<Client> getClients() {
         return clients;
     }
 
-    public void setClients(ArrayList<Client> clients) {
+    public void setClients(HashSet<Client> clients) {
         this.clients = clients;
     }
 
