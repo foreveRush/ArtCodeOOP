@@ -1,12 +1,13 @@
-package ua.artcode.week4;
+package ua.artcode.week4.sorting;
 
-import java.util.Random;
+import ua.artcode.week4.TimeCounter;
+import ua.artcode.week4.Utils;
 
 /**
  * Created by Serhii Fursenko on 20.07.2016.
  * fyrsenko@gmail.com
  */
-public class Testing {
+public class TestSort {
 
     public static void main(String[] args) {
 

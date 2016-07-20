@@ -1,4 +1,4 @@
-package ua.artcode.week4;
+package ua.artcode.week4.sorting;
 
 /**
  * Created by Serhii Fursenko on 20.07.2016.
