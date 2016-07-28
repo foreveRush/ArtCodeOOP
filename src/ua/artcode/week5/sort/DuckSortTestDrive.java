@@ -17,8 +17,6 @@ public class DuckSortTestDrive {
 		System.out.println("Before sorting:");
 		display(ducks);
 
-        // TODO ducks must be sorted by weight
-
 		Arrays.sort(ducks, new DuckWeightComparator());
 
 		System.out.println("\nAfter sorting:");

@@ -8,6 +8,6 @@ import java.util.Comparator;
 public class DuckWeightComparator implements Comparator<Duck> {
     @Override
     public int compare(Duck o1, Duck o2) {
-        return o1.weight<o2.weight? -1 : o1.weight>o2.weight? 1 : 0;
+        return o1.weight-o2.weight;
     }
 }
