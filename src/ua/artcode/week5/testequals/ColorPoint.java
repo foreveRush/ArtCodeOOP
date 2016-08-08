@@ -10,13 +10,8 @@ public class ColorPoint extends Point {
 
      public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ColorPoint) && !super.equals(o)) return false;
-        if (o instanceof ColorPoint) {
+        if (!(o instanceof Point)) return false;
 
-            ColorPoint cp = (ColorPoint) o;
-            return super.equals(o) && cp.color.equals(color);
-
-        }
-         return true;
+         return super.equals(o);
     }
 }

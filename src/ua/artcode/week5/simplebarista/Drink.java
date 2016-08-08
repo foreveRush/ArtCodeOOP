@@ -13,5 +13,13 @@ public abstract class Drink {
         System.out.println("Pouring into cup");
     }
 
-    public abstract void prepareRecipe();
+    public final void prepareRecipe(){
+        System.out.println("Making " + this.getClass().getSimpleName() + "...");
+        boilWater();
+        addAdditions();
+        pourInCup();
+        System.out.println(this.getClass().getSimpleName() + " is ready\n");
+    };
+
+    public abstract void addAdditions();
 }
