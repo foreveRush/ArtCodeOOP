@@ -7,15 +7,17 @@ import java.util.Set;
 /**
  * Created by Serhii Fursenko on 08.08.16.
  */
-public class MyHashMap<K, V> implements Map<K, V> {
+public class MyHashtable<K, V> implements Map<K, V> {
 
     public static final int DEFAULT_TABLE_SIZE = 32;
 
     private Node[] table;
     private int size;
 
-    public MyHashMap() {
-        table = (Node[]) new Object[DEFAULT_TABLE_SIZE];
+    public MyHashtable() {
+
+        table = new Node[DEFAULT_TABLE_SIZE];
+
     }
 
     @Override
@@ -48,20 +50,25 @@ public class MyHashMap<K, V> implements Map<K, V> {
         int hash = key.hashCode();
         if (table[hash % table.length] == null) {
             table[hash % table.length] = new Node(key, value, null);
-        } else {
-            putToFreeNode(table[hash % table.length], key, value);
+            size++;
+            return value;
         }
-        size++;
 
-        return value;
+        boolean operationSuccessfully = tryPut(table[hash % table.length], value);
+
+        return operationSuccessfully? value : null;
     }
 
-    private void putToFreeNode(Node node, K key, V value) {
-        if (node.next == null) {
-            node.next = new Node(key, value, null);
-        } else {
-            putToFreeNode(node.next, key, value);
+    private boolean tryPut(Node node, V value) {
+
+        if(node.value.equals(value)) return false;
+
+        if(node.next==null) {
+            node.next = node;
+            return true;
         }
+
+        return tryPut(node.next, value);
     }
 
     @Override

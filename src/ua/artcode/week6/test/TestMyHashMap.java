@@ -1,6 +1,6 @@
 package ua.artcode.week6.test;
 
-import ua.artcode.week6.MyHashMap;
+import ua.artcode.week6.MyHashtable;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import java.util.Map;
 public class TestMyHashMap {
 
     public static void main(String[] args) {
-        Map<String, Integer> map = new MyHashMap<>();
+        Map<String, Integer> map = new MyHashtable<>();
         System.out.println(map.size());
 
         map.put("1",1);
