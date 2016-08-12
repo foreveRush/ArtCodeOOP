@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by Serhii Fursenko on 08.08.16.
@@ -15,6 +16,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
     private int size;
     private Set<K> keySet;
     private Collection<V> valueSet;
+
 
     public MyHashtable() {
 
@@ -147,8 +149,10 @@ public class MyHashtable<K, V> implements Map<K, V> {
     }
 
     @Override
-    public void putAll(Map m) {
-
+    public void putAll(Map<? extends K, ? extends V> m) {
+        for (Entry<? extends K, ? extends V> entry : m.entrySet()) {
+            this.put(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override
@@ -172,7 +176,9 @@ public class MyHashtable<K, V> implements Map<K, V> {
     @Override
     public Set<Entry<K, V>> entrySet() {
 
-        return null;
+        Set<Entry<K, V>> entrySet = keySet.stream().map(key -> new MyEntry<>(key, this.get(key))).collect(Collectors.toSet());
+
+        return entrySet;
     }
 
     private class Node<K, V> {
@@ -185,7 +191,33 @@ public class MyHashtable<K, V> implements Map<K, V> {
             this.value = value;
             this.next = node;
         }
+    }
 
+    private class MyEntry<K, V> implements Entry<K, V> {
 
+        K key;
+        V value;
+
+        public MyEntry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public Object setValue(Object value) {
+            V tempValue = (V) value;
+            this.value = (V) value;
+            return tempValue;
+        }
     }
 }
