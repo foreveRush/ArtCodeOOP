@@ -37,11 +37,21 @@ public class MyHashtable<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
+
+        for(K iterator : keySet) {
+
+            if(iterator.equals(key)) return true;
+
+        }
         return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
+
+        for(V iterator : valueSet) {
+            if(iterator.equals(value)) return true;
+        }
         return false;
     }
 
