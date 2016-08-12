@@ -1,6 +1,7 @@
 package ua.artcode.week6;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,15 +11,16 @@ import java.util.Set;
 public class MyHashtable<K, V> implements Map<K, V> {
 
     public static final int DEFAULT_TABLE_SIZE = 32;
-
     private Node[] table;
-
     private int size;
+    private Set<K> keySet;
+    private Collection<V> valueSet;
 
     public MyHashtable() {
 
         table = new Node[DEFAULT_TABLE_SIZE];
-
+        keySet = new HashSet<>();
+        valueSet = new HashSet<>();
     }
 
     @Override
@@ -28,7 +30,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
 
     @Override
     public boolean isEmpty() {
-        return table == null ? true : false;
+        return size == 0 ? true : false;
     }
 
     @Override
@@ -77,6 +79,8 @@ public class MyHashtable<K, V> implements Map<K, V> {
         if (table[hash % table.length] == null) {
             table[hash % table.length] = new Node(key, value, null);
             size++;
+            keySet.add(key);
+            valueSet.add(value);
             return value;
         }
 
@@ -88,12 +92,16 @@ public class MyHashtable<K, V> implements Map<K, V> {
     private boolean tryPut(Node node, K key, V value) {
 
         if (node.key.equals(key)) {
+            valueSet.remove(node.value);
+            valueSet.add(value);
             node.value = value;
             return true;
         }
 
         if (node.next == null) {
             node.next = new Node(key, value, null);
+            valueSet.add(value);
+            keySet.add(key);
             size++;
             return true;
         }
@@ -106,29 +114,36 @@ public class MyHashtable<K, V> implements Map<K, V> {
 
         V value;
         int hash = key.hashCode();
-        Node node = table[hash%table.length];
+        Node node = table[hash % table.length];
 
-        if(node==null) return null;
+        if (node == null) return null;
 
-        if(node.key.equals(key)) {
+        if (node.key.equals(key)) {
             value = (V) node.value;
-            table[hash%table.length] = node.next;
+            table[hash % table.length] = node.next;
             size--;
+            keySet.remove(key);
+            valueSet.remove(value);
             return value;
         }
 
-        value = tryRemoveFromNextNode(node.next, (K) key);
+        value = tryRemoveFromNextNode(node, (K) key);
 
 
-        return null;
+        return value;
     }
 
-    private V tryRemoveFromNextNode (Node node, K key) {
-        if(node==null) return null;
-        if(key.equals(node.key)) {
-
+    private V tryRemoveFromNextNode(Node node, K key) {
+        if (node.next == null) return null;
+        if (key.equals(node.next.key)) {
+            V value = (V) node.next;
+            node.next = node.next.next;
+            size--;
+            keySet.remove(key);
+            valueSet.remove(value);
+            return value;
         }
-        return null;
+        return tryRemoveFromNextNode(node.next, key);
     }
 
     @Override
@@ -138,17 +153,20 @@ public class MyHashtable<K, V> implements Map<K, V> {
 
     @Override
     public void clear() {
-
+        table = new Node[DEFAULT_TABLE_SIZE];
+        keySet = new HashSet<>();
+        valueSet = new HashSet<>();
+        size = 0;
     }
 
     @Override
     public Set keySet() {
-        return null;
+        return keySet;
     }
 
     @Override
     public Collection values() {
-        return null;
+        return valueSet;
     }
 
     @Override
