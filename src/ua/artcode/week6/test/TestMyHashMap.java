@@ -28,9 +28,17 @@ public class TestMyHashMap {
         int testValue = map.get("3");
 
         for(Map.Entry<String, Integer> entry : set) {
-            System.out.println("key = " + entry.getKey());
-            System.out.println("value = " + entry.getValue());
+            System.out.println(entry.getKey() + ": " + entry.getValue());
         }
+
+        System.out.println(map.containsKey("10"));
+        System.out.println(map.containsKey("1"));
+        System.out.println(map.containsKey("3"));
+
+        for(int i=0; i<50; i++) {
+            map.put(String.valueOf(i),i);
+        }
+
 
 
 

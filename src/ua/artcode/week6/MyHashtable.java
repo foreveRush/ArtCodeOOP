@@ -12,10 +12,12 @@ import java.util.stream.Collectors;
 public class MyHashtable<K, V> implements Map<K, V> {
 
     public static final int DEFAULT_TABLE_SIZE = 32;
+    public static final double DEFAULT_LOAD_FACTOR = 0.7f;
     private Node[] table;
     private int size;
     private Set<K> keySet;
     private Collection<V> valueSet;
+    private double loadFactor;
 
 
     public MyHashtable() {
@@ -23,7 +25,16 @@ public class MyHashtable<K, V> implements Map<K, V> {
         table = new Node[DEFAULT_TABLE_SIZE];
         keySet = new HashSet<>();
         valueSet = new HashSet<>();
+        loadFactor = DEFAULT_LOAD_FACTOR;
     }
+
+    public MyHashtable(int loadFactor) {
+
+        this();
+        this.loadFactor = loadFactor;
+    }
+
+
 
     @Override
     public int size() {
@@ -58,9 +69,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
     @Override
     public V get(Object key) {
 
-        int hash = key.hashCode();
-
-        Node node = table[hash % table.length];
+        Node node = table[numberForKey((K) key)];
 
         if (node == null) return null;
 
@@ -86,28 +95,35 @@ public class MyHashtable<K, V> implements Map<K, V> {
     @Override
     public V put(K key, V value) {
 
-        int hash = key.hashCode();
-
-        if (table[hash % table.length] == null) {
-            table[hash % table.length] = new Node(key, value, null);
+        if (table[numberForKey(key)] == null) {
+            table[numberForKey(key)] = new Node(key, value, null);
             size++;
             keySet.add(key);
             valueSet.add(value);
-            return value;
+            if(getActualLoad() >= loadFactor) rehash();
+            return null;
         }
 
-        boolean operationSuccessfully = tryPut(table[hash % table.length], key, value);
+        V valueToReturn = tryPut(table[numberForKey(key)], key, value);
 
-        return operationSuccessfully ? value : null;
+        if(getActualLoad() >= loadFactor) rehash();
+
+        return valueToReturn;
     }
 
-    private boolean tryPut(Node node, K key, V value) {
+    private double getActualLoad() {
+        return (double)size/table.length;
+    }
+
+
+    private V tryPut(Node node, K key, V value) {
 
         if (node.key.equals(key)) {
+            V valueToReturn = (V) node.value;
             valueSet.remove(node.value);
             valueSet.add(value);
             node.value = value;
-            return true;
+            return valueToReturn;
         }
 
         if (node.next == null) {
@@ -115,24 +131,39 @@ public class MyHashtable<K, V> implements Map<K, V> {
             valueSet.add(value);
             keySet.add(key);
             size++;
-            return true;
+            return null;
         }
 
         return tryPut(node.next, key, value);
+    }
+
+    private boolean rehash() {
+
+        Set<Entry<K,V>> entrySet = entrySet();
+        table = new Node[table.length*2];
+
+        for(Entry<K,V> entry : entrySet) {
+            this.put(entry.getKey(), entry.getValue());
+        }
+
+        return true;
+    }
+
+    private int numberForKey(K key) {
+        return key.hashCode()%table.length;
     }
 
     @Override
     public V remove(Object key) {
 
         V value;
-        int hash = key.hashCode();
-        Node node = table[hash % table.length];
+        Node node = table[numberForKey((K) key)];
 
         if (node == null) return null;
 
         if (node.key.equals(key)) {
             value = (V) node.value;
-            table[hash % table.length] = node.next;
+            table[numberForKey((K) key)] = node.next;
             size--;
             keySet.remove(key);
             valueSet.remove(value);
@@ -150,6 +181,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
         if (key.equals(node.next.key)) {
             V value = (V) node.next;
             node.next = node.next.next;
+            node.next.next=null;
             size--;
             keySet.remove(key);
             valueSet.remove(value);
@@ -225,7 +257,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
 
         @Override
         public Object setValue(Object value) {
-            V tempValue = (V) value;
+            V tempValue = this.value;
             this.value = (V) value;
             return tempValue;
         }
