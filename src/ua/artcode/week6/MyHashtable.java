@@ -193,7 +193,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
         }
     }
 
-    public class MyEntry<K, V> implements Entry<K, V> {
+    private class MyEntry<K, V> implements Entry<K, V> {
 
         K key;
         V value;
