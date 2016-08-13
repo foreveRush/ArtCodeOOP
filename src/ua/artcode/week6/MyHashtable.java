@@ -180,7 +180,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
         if (node.next == null) return null;
         if (key.equals(node.next.key)) {
             V value = (V) node.next;
-            node.next = node.next.next;
+            // I think we don't need clean old node, now we haven't any ref to it and CleanMachine will clean memory
             node.next.next=null;
             size--;
             keySet.remove(key);
