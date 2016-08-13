@@ -49,21 +49,13 @@ public class MyHashtable<K, V> implements Map<K, V> {
     @Override
     public boolean containsKey(Object key) {
 
-        for(K iterator : keySet) {
-
-            if(iterator.equals(key)) return true;
-
-        }
-        return false;
+        return keySet.contains(key);
     }
 
     @Override
     public boolean containsValue(Object value) {
 
-        for(V iterator : valueSet) {
-            if(iterator.equals(value)) return true;
-        }
-        return false;
+        return valueSet.contains(value);
     }
 
     @Override
@@ -150,7 +142,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
     }
 
     private int numberForKey(K key) {
-        return key.hashCode()%table.length;
+        return Math.abs(key.hashCode()%table.length);
     }
 
     @Override
@@ -180,8 +172,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
         if (node.next == null) return null;
         if (key.equals(node.next.key)) {
             V value = (V) node.next;
-            // I think we don't need clean old node, now we haven't any ref to it and CleanMachine will clean memory
-            node.next.next=null;
+            node.next=node.next.next;
             size--;
             keySet.remove(key);
             valueSet.remove(value);
