@@ -13,32 +13,17 @@ import java.util.Set;
 public class TestMyHashMap {
 
     public static void main(String[] args) {
-        Map<String, Integer> map = new MyHashtable<>();
+        MyHashtable<String, Integer> map = new MyHashtable<>();
         System.out.println(map.isEmpty());
 
-
-
-        map.put("1",1);
-
+        map.put("1", 1);
         map.put("2",2);
-        map.put("2",3);
-        map.put("3",32);
+        map.put("2", 3);
+        map.put("3", 32);
 
-        Set<Map.Entry<String,Integer>> set = map.entrySet();
-        int testValue = map.get("3");
-
-        for(Map.Entry<String, Integer> entry : set) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+        for (Map.Entry<String, Integer> entry : map) {
+            System.out.printf("key %s, value %s\n", entry.getKey(), entry.getValue());
         }
-
-        System.out.println(map.containsKey("10"));
-        System.out.println(map.containsKey("1"));
-        System.out.println(map.containsKey("3"));
-
-        for(int i=0; i<50; i++) {
-            map.put(String.valueOf(i),i);
-        }
-
 
 
 

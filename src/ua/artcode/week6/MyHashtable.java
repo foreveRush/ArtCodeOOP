@@ -1,19 +1,16 @@
 package ua.artcode.week6;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Created by Serhii Fursenko on 08.08.16.
  */
-public class MyHashtable<K, V> implements Map<K, V> {
+public class MyHashtable<K, V> implements Map<K, V>, Iterable<Map.Entry<K,V>> {
 
     public static final int DEFAULT_TABLE_SIZE = 32;
     public static final double DEFAULT_LOAD_FACTOR = 0.7f;
-    private Node[] table;
+    private Node<K,V>[] table;
     private int size;
     private Set<K> keySet;
     private Collection<V> valueSet;
@@ -33,7 +30,6 @@ public class MyHashtable<K, V> implements Map<K, V> {
         this();
         this.loadFactor = loadFactor;
     }
-
 
 
     @Override
@@ -92,19 +88,19 @@ public class MyHashtable<K, V> implements Map<K, V> {
             size++;
             keySet.add(key);
             valueSet.add(value);
-            if(getActualLoad() >= loadFactor) rehash();
+            if (getActualLoad() >= loadFactor) rehash();
             return null;
         }
 
         V valueToReturn = tryPut(table[numberForKey(key)], key, value);
 
-        if(getActualLoad() >= loadFactor) rehash();
+        if (getActualLoad() >= loadFactor) rehash();
 
         return valueToReturn;
     }
 
     private double getActualLoad() {
-        return (double)size/table.length;
+        return (double) size / table.length;
     }
 
 
@@ -131,10 +127,10 @@ public class MyHashtable<K, V> implements Map<K, V> {
 
     private boolean rehash() {
 
-        Set<Entry<K,V>> entrySet = entrySet();
-        table = new Node[table.length*2];
+        Set<Entry<K, V>> entrySet = entrySet();
+        table = new Node[table.length * 2];
 
-        for(Entry<K,V> entry : entrySet) {
+        for (Entry<K, V> entry : entrySet) {
             this.put(entry.getKey(), entry.getValue());
         }
 
@@ -142,7 +138,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
     }
 
     private int numberForKey(K key) {
-        return Math.abs(key.hashCode()%table.length);
+        return Math.abs(key.hashCode() % table.length);
     }
 
     @Override
@@ -172,7 +168,7 @@ public class MyHashtable<K, V> implements Map<K, V> {
         if (node.next == null) return null;
         if (key.equals(node.next.key)) {
             V value = (V) node.next;
-            node.next=node.next.next;
+            node.next = node.next.next;
             size--;
             keySet.remove(key);
             valueSet.remove(value);
@@ -214,15 +210,35 @@ public class MyHashtable<K, V> implements Map<K, V> {
         return entrySet;
     }
 
-    private class Node<K, V> {
+    @Override
+    public Iterator<Entry<K, V>> iterator() {
+        return new MyHashMapIterator();
+    }
+
+    private class Node<K, V> implements Entry<K,V>{
         K key;
         V value;
-        Node next;
+        Node<K,V> next;
 
-        public Node(K key, V value, Node node) {
+        public Node(K key, V value, Node<K,V> node) {
             this.key = key;
             this.value = value;
             this.next = node;
+        }
+
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public V setValue(V value) {
+            return null;
         }
     }
 
@@ -247,10 +263,57 @@ public class MyHashtable<K, V> implements Map<K, V> {
         }
 
         @Override
-        public Object setValue(Object value) {
+        public V setValue(V value) {
             V tempValue = this.value;
-            this.value = (V) value;
+            this.value = value;
             return tempValue;
         }
     }
+
+    private class MyHashMapIterator implements Iterator<Entry<K, V>> {
+
+        private Node<K, V> currentNode;
+        private int currBucketIndex;
+
+        public MyHashMapIterator() {
+
+            if (!isEmpty()) {
+                currBucketIndex = findFirstNotNull(0);
+                currentNode = table[currBucketIndex];
+            }
+
+        }
+
+        private int findFirstNotNull(int start){
+            for (; start < table.length && table[start] == null; start++) {
+            }
+            return start;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentNode != null;
+        }
+
+        @Override
+        public Entry<K, V> next() {
+            Node<K,V> forRet = currentNode;
+
+            // find next current node
+            if(forRet.next != null){
+                currentNode = forRet.next;
+            } else {
+                int notNullIndex = findFirstNotNull(currBucketIndex + 1);
+                if(notNullIndex == table.length){
+                    currentNode = null;
+                } else {
+                    currBucketIndex = notNullIndex;
+                    currentNode = table[currBucketIndex];
+                }
+            }
+
+            return forRet;
+        }
+    }
+
 }
