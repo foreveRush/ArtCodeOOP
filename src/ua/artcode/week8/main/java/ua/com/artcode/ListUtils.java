@@ -33,6 +33,7 @@ public class ListUtils {
         }
         Collections.reverse(listOfNodes);
         A<T> [] arrayOfNodes = listOfNodes.stream().toArray(A[]::new);
+        newHead = arrayOfNodes[0];
         for(int i=0; i<arrayOfNodes.length; i++) {
             if(i==arrayOfNodes.length-1) {
                 arrayOfNodes[i].setNext(null);
@@ -41,7 +42,7 @@ public class ListUtils {
             arrayOfNodes[i].setNext(arrayOfNodes[i+1]);
         }
 
-        return arrayOfNodes[0];
+        return newHead;
     }
 
 
