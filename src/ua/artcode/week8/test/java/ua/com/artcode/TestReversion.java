@@ -1,0 +1,72 @@
+package ua.artcode.week8.test.java.ua.com.artcode;
+
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+import ua.artcode.week8.main.java.ua.com.artcode.A;
+import ua.artcode.week8.main.java.ua.com.artcode.ListUtils;
+import ua.artcode.week8.main.java.ua.com.artcode.Node;
+
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
+
+public class TestReversion {
+
+    static A<Object> head;
+    static A<Object> second;
+    static A<Object> third;
+    static A<Object> fourth;
+    static A<Object> fifth;
+    static A<Object> sixth;
+    static A<Object> seventh;
+
+    @BeforeClass
+    public static void create() {
+        head = new Node<>();
+        second = new Node<>();
+        third = new Node<>();
+        fourth = new Node<>();
+        fifth = new Node<>();
+        sixth = new Node<>();
+        seventh = new Node<>();
+        head.setNext(second);
+        second.setNext(third);
+        third.setNext(fourth);
+        fourth.setNext(fifth);
+        fifth.setNext(sixth);
+        sixth.setNext(seventh);
+    }
+
+    @Test
+    public void testReversion(){
+
+        A<Object> expected = seventh;
+        A<Object> actual = ListUtils.reversion(head);
+        assertSame(expected, actual);
+
+        expected = sixth;
+        actual = actual.getNext();
+        assertSame(expected, actual);
+
+        expected = fifth;
+        actual = actual.getNext();
+        assertSame(expected, actual);
+
+        expected = fourth;
+        actual = actual.getNext();
+        assertSame(expected, actual);
+
+        expected = third;
+        actual = actual.getNext();
+        assertSame(expected, actual);
+
+        expected = second;
+        actual = actual.getNext();
+        assertSame(expected, actual);
+
+        expected = head;
+        actual = actual.getNext();
+        assertSame(expected, actual);
+    }
+
+}
