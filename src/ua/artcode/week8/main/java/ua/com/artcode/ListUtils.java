@@ -21,43 +21,30 @@ public class ListUtils {
 
     public static <T> A<T> reversion(A<T> head) {
 
-        A<T> newHead = head;
+        A<T> newHead = null;
+        A<T> tempLast = null;
         A<T> tempNode;
-        int length = 0;
+        tempNode = head;
 
-        while (newHead.getNext() != null) {
-            newHead = newHead.getNext();
-            length++;
+        while (tempNode.getNext() != null) {
+            tempNode = tempNode.getNext();
+            newHead = tempNode;
         }
 
-        for (int i = length - 1; i >= 0; i--) {
-            tempNode = getNode(head, i);
-            setLast(newHead, tempNode);
-        }
+        A<T> currentNode = newHead;
+        tempLast = newHead;
 
+        while (tempLast != head) {
+
+            tempNode = head;
+            while (tempNode.getNext() != tempLast) {
+                tempNode = tempNode.getNext();
+            }
+            tempNode.setNext(null);
+            tempLast = tempNode;
+            currentNode.setNext(tempNode);
+            currentNode = currentNode.getNext();
+        }
         return newHead;
     }
-
-    private static <T> A<T> getNode(A<T> head, int index) {
-        A<T> nodeForRet = head;
-        for (int i = 0; i < index; i++) {
-            nodeForRet = nodeForRet.getNext();
-        }
-        nodeForRet.setNext(null);
-        return nodeForRet;
-    }
-
-    private static <T> void setLast(A<T> head, A<T> nodeToPut) {
-        A<T> nodeForReplace = head.getNext();
-        if (nodeForReplace == null) {
-            head.setNext(nodeToPut);
-            return;
-        }
-        while (nodeForReplace.getNext() != null) {
-            nodeForReplace = nodeForReplace.getNext();
-        }
-        nodeForReplace.setNext(nodeToPut);
-    }
-
-
 }
