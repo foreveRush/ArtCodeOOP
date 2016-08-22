@@ -1,9 +1,5 @@
 package ua.artcode.week8.main.java.ua.com.artcode;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 public class ListUtils {
 
     public static A<String> createStringList() {
@@ -24,25 +20,43 @@ public class ListUtils {
     }
 
     public static <T> A<T> reversion(A<T> head) {
-//        todo write your code
-        List<A<T>> listOfNodes = new LinkedList<>();
+
         A<T> newHead = head;
-        while (newHead!=null) {
-            listOfNodes.add(newHead);
-            newHead=newHead.getNext();
+        A<T> tempNode;
+        int length = 0;
+
+        while (newHead.getNext() != null) {
+            newHead = newHead.getNext();
+            length++;
         }
-        Collections.reverse(listOfNodes);
-        A<T> [] arrayOfNodes = listOfNodes.stream().toArray(A[]::new);
-        newHead = arrayOfNodes[0];
-        for(int i=0; i<arrayOfNodes.length; i++) {
-            if(i==arrayOfNodes.length-1) {
-                arrayOfNodes[i].setNext(null);
-                return arrayOfNodes[0];
-            }
-            arrayOfNodes[i].setNext(arrayOfNodes[i+1]);
+
+        for (int i = length - 1; i >= 0; i--) {
+            tempNode = getNode(head, i);
+            setLast(newHead, tempNode);
         }
 
         return newHead;
+    }
+
+    private static <T> A<T> getNode(A<T> head, int index) {
+        A<T> nodeForRet = head;
+        for (int i = 0; i < index; i++) {
+            nodeForRet = nodeForRet.getNext();
+        }
+        nodeForRet.setNext(null);
+        return nodeForRet;
+    }
+
+    private static <T> void setLast(A<T> head, A<T> nodeToPut) {
+        A<T> nodeForReplace = head.getNext();
+        if (nodeForReplace == null) {
+            head.setNext(nodeToPut);
+            return;
+        }
+        while (nodeForReplace.getNext() != null) {
+            nodeForReplace = nodeForReplace.getNext();
+        }
+        nodeForReplace.setNext(nodeToPut);
     }
 
 
