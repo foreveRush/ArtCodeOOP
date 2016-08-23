@@ -1,5 +1,7 @@
 package ua.artcode.week8.main.java.ua.com.artcode;
 
+import java.util.Objects;
+
 public class ListUtils {
 
     public static A<String> createStringList() {
@@ -21,29 +23,14 @@ public class ListUtils {
 
     public static <T> A<T> reversion(A<T> head) {
 
-        A<T> newHead = null;
-        A<T> tempLast = null;
+        A<T> newHead = head;
         A<T> tempNode;
-        tempNode = head;
 
-        while (tempNode.getNext() != null) {
-            tempNode = tempNode.getNext();
+        while (head.getNext()!=null) {
+            tempNode = head.getNext();
+            head.setNext(tempNode.getNext());
+            tempNode.setNext(newHead);
             newHead = tempNode;
-        }
-
-        A<T> currentNode = newHead;
-        tempLast = newHead;
-
-        while (tempLast != head) {
-
-            tempNode = head;
-            while (tempNode.getNext() != tempLast) {
-                tempNode = tempNode.getNext();
-            }
-            tempNode.setNext(null);
-            tempLast = tempNode;
-            currentNode.setNext(tempNode);
-            currentNode = currentNode.getNext();
         }
         return newHead;
     }
